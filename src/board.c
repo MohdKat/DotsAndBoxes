@@ -63,28 +63,20 @@ int board_is_valid_move(const Board *b, Move m)
 int board_apply_move(Board *b, Move m, char player)
 {
     int won = 0;
-    if(!board_is_valid_move(b, m)){
-        perror("Move is not valid!");
-        return 0;
-    }
-
-    //Vertical Move
-    if(m.r1 == m.r2){
+    //Horizontal line
+    if (m.r1 == m.r2) {
+        int r = m.r1;
         int c = (m.c1 < m.c2) ? m.c1 : m.c2;
-        b->v[m.r1][c] = 1;
-        if(++b->sides[m.r1][c] == 4){
-            b->owner[m.r1][c] = player;
-            won++;
-        }
-    }else{ //Horizontal Move
-       int r = (m.r1 < m.r2) ? m.r1 : m.r2;
-       b->h[r][m.c1]; 
-        if(++b->sides[r][m.c1] == 4){
-            b->owner[r][m.c1] = player;
-            won++;
-        }
+        b->h[r][c] = 1;
+        if (r > 0)        add_side(b, r - 1, c, player, &won);
+        if (r < BOX_ROWS) add_side(b, r,     c, player, &won); //Box under
+    } else {  //Vertical line
+        int c = m.c1;
+        int r = (m.r1 < m.r2) ? m.r1 : m.r2;
+        b->v[r][c] = 1;
+        if (c > 0)        add_side(b, r, c - 1, player, &won);  //Accpunting for left box
+        if (c < BOX_COLS) add_side(b, r, c,     player, &won);  //Accounting for right box
     }
-    
     return won;
 }
 

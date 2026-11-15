@@ -8,8 +8,9 @@ TARGET    := dots_and_boxes
 SRCS := $(wildcard $(SRC_DIR)/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 DEPS := $(OBJS:.o=.d)
+TEST_SRCS := $(filter-out $(SRC_DIR)/main.c,$(SRCS)) tests/test_board.c
 
-.PHONY: all run valgrind debug clean
+.PHONY: all run test valgrind debug clean
 
 all: $(TARGET)
 
@@ -24,6 +25,10 @@ $(BUILD_DIR):
 
 run: $(TARGET)
 	./$(TARGET)
+
+test: | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(TEST_SRCS) -o $(BUILD_DIR)/test_board
+	./$(BUILD_DIR)/test_board
 
 valgrind: $(TARGET)
 	mkdir -p $(LOG_DIR)
