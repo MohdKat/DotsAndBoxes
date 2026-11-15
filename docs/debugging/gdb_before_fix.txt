@@ -1,0 +1,52 @@
+Breakpoint 1 at 0x14dc: file src/board.c, line 65.
+Starting program: /home/mohdkat/projects/DotsAndBoxes/dots_and_boxes 
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Debuginfod has been enabled.
+To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
+Downloading separate debug info for system-supplied DSO at 0x7ffff7fc3000
+[###                                                                                                                  ][ ###                                                                                                                 ][  ###                                                                                                                ][   ###                                                                                                               ][    ###                                                                                                              ][     ###                                                                                                             ][      ###                                                                                                            ]                                                                                                                         [Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, board_apply_move (b=0x5555555592a0, m=..., player=65 'A') at src/board.c:65
+65	    int won = 0;
+$1 = {r1 = 0, c1 = 0, r2 = 0, c2 = 1}
+66	    if(!board_is_valid_move(b, m)){
+72	    if(m.r1 == m.r2){
+$2 = 0
+$3 = 0
+73	        int c = (m.c1 < m.c2) ? m.c1 : m.c2;
+74	        b->v[m.r1][c] = 1;
+75	        if(++b->sides[m.r1][c] == 4){
+88	    return won;
+$4 = 1
+Hardware watchpoint 2: -location b->owner[0][0]
+Continuing.
+
+Hardware watchpoint 2: -location b->owner[0][0]
+
+Old value = 32 ' '
+New value = 33 '!'
+board_apply_move (b=0x5555555592a0, m=..., player=65 'A') at src/board.c:82
+82	        if(++b->sides[r][m.c1] == 4){
+#0  board_apply_move (b=0x5555555592a0, m=..., player=65 'A') at src/board.c:82
+#1  0x0000555555555780 in play (b=0x5555555592a0, r1=3, c1=5, r2=4, c2=5, player=65 'A') at src/main.c:12
+#2  0x000055555555598d in main () at src/main.c:38
+$5 = {r1 = 3, c1 = 5, r2 = 4, c2 = 5}
+Continuing.
+
+Hardware watchpoint 2: -location b->owner[0][0]
+
+Old value = 33 '!'
+New value = 34 '"'
+board_apply_move (b=0x5555555592a0, m=..., player=65 'A') at src/board.c:75
+75	        if(++b->sides[m.r1][c] == 4){
+Continuing.
+
+Hardware watchpoint 2: -location b->owner[0][0]
+
+Old value = 34 '"'
+New value = 35 '#'
+board_apply_move (b=0x5555555592a0, m=..., player=65 'A') at src/board.c:82
+82	        if(++b->sides[r][m.c1] == 4){
