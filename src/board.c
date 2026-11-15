@@ -7,7 +7,6 @@ Board *board_create(void)
     //Why calloc not malloc? TO initialize the bytes of the board to 0s
     Board *b = calloc(1, sizeof(Board));
     if (b == NULL) {
-        perror("Could not successfully allocate heap memory!");
         return NULL;
     }
     for (int r = 0; r < BOX_ROWS; r++) {
