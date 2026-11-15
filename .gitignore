@@ -1,0 +1,5 @@
+build/
+dots_and_boxes
+*.o
+*.d
+vgcore.*
