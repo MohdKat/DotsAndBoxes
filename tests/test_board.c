@@ -1,59 +1,116 @@
+
 #include <stdio.h>
+#include <assert.h>
 #include "board.h"
 
-/* Temporary test driver for board.c, replaced by run_game() later */
-static void play(Board *b, int r1, int c1, int r2, int c2, char player)
+void test_board_creation(void)
 {
-    Move m = {r1, c1, r2, c2};
-    if (!board_is_valid_move(b, m)) {
-        printf("%c: %d %d %d %d -> invalid\n", player, r1, c1, r2, c2);
-        return;
+    Board *b = board_create();
+
+    assert(b != NULL);
+    assert(b->claimed == 0);
+    assert(b->owner[0][0] == ' ');
+    assert(board_is_full(b) == 0);
+
+    board_destroy(b);
+    printf("Board creation: PASSED\n");
+}
+
+void test_valid_moves(void)
+{
+    Board *b = board_create();
+
+    Move valid = {0, 0, 0, 1};
+    Move diagonal = {0, 0, 1, 1};
+    Move out_of_bounds = {-1, 0, 0, 0};
+
+    assert(board_is_valid_move(b, valid) == 1);
+    assert(board_is_valid_move(b, diagonal) == 0);
+    assert(board_is_valid_move(b, out_of_bounds) == 0);
+
+    board_destroy(b);
+    printf("Move validation: PASSED\n");
+}
+
+void test_duplicate_move(void)
+{
+    Board *b = board_create();
+    Move m = {0, 0, 0, 1};
+
+    assert(board_is_valid_move(b, m) == 1);
+
+    board_apply_move(b, m, 'A');
+
+    assert(board_is_valid_move(b, m) == 0);
+
+    board_destroy(b);
+    printf("Duplicate move prevention: PASSED\n");
+}
+
+void test_box_completion(void)
+{
+    Board *b = board_create();
+
+    Move moves[] = {
+        {0, 0, 0, 1},
+        {1, 0, 1, 1},
+        {0, 0, 1, 0},
+        {0, 1, 1, 1}
+    };
+
+    for (int i = 0; i < 3; i++) {
+        assert(board_is_valid_move(b, moves[i]));
+        assert(board_apply_move(b, moves[i], 'A') == 0);
     }
-    int won = board_apply_move(b, m, player);
-    printf("%c: %d %d %d %d -> valid, won %d\n", player, r1, c1, r2, c2, won);
+
+    assert(board_is_valid_move(b, moves[3]));
+    assert(board_apply_move(b, moves[3], 'A') == 1);
+
+    assert(b->owner[0][0] == 'A');
+    assert(b->claimed == 1);
+
+    board_destroy(b);
+    printf("Box completion and scoring: PASSED\n");
+}
+
+void test_full_board(void)
+{
+    Board *b = board_create();
+
+    for (int r = 0; r < DOT_ROWS; r++) {
+        for (int c = 0; c < BOX_COLS; c++) {
+            Move m = {r, c, r, c + 1};
+
+            assert(board_is_valid_move(b, m));
+            board_apply_move(b, m, 'A');
+        }
+    }
+
+    for (int r = 0; r < BOX_ROWS; r++) {
+        for (int c = 0; c < DOT_COLS; c++) {
+            Move m = {r, c, r + 1, c};
+
+            assert(board_is_valid_move(b, m));
+            board_apply_move(b, m, 'A');
+        }
+    }
+
+    assert(board_is_full(b) == 1);
+    assert(b->claimed == TOTAL_BOXES);
+
+    board_destroy(b);
+    printf("Full board detection: PASSED\n");
 }
 
 int main(void)
 {
-    Board *b = board_create();
-    if (b == NULL) {
-        fprintf(stderr, "Out of memory\n");
-        return 1;
-    }
+    test_board_creation();
+    test_valid_moves();
+    test_duplicate_move();
+    test_box_completion();
+    test_full_board();
 
-    /* the 4 sides of box (0,0): B draws the last one and wins it */
-    play(b, 0, 0, 0, 1, 'A');   /* top    */
-    play(b, 1, 0, 1, 1, 'B');   /* bottom */
-    play(b, 0, 0, 1, 0, 'A');   /* left   */
-    play(b, 0, 1, 1, 1, 'B');   /* right  */
+    printf("\nAll tests passed!\n");
 
-    /* must all be rejected */
-    play(b, 0, 0, 0, 1, 'A');   /* already drawn */
-    play(b, 0, 0, 1, 1, 'A');   /* diagonal      */
-    play(b, 0, 0, 0, 2, 'A');   /* too long      */
-    play(b, 4, 5, 4, 6, 'A');   /* off the board */
-
-    /* edge lines: only one box each */
-    play(b, 4, 4, 4, 5, 'A');   /* bottom edge */
-    play(b, 3, 5, 4, 5, 'A');   /* right edge  */
-
-    /* draw every remaining line: board must end full */
-    for (int r = 0; r < DOT_ROWS; r++) {
-        for (int c = 0; c + 1 < DOT_COLS; c++) {
-            Move m = {r, c, r, c + 1};
-            if (board_is_valid_move(b, m)) board_apply_move(b, m, 'A');
-        }
-    }
-    for (int r = 0; r + 1 < DOT_ROWS; r++) {
-        for (int c = 0; c < DOT_COLS; c++) {
-            Move m = {r, c, r + 1, c};
-            if (board_is_valid_move(b, m)) board_apply_move(b, m, 'A');
-        }
-    }
-
-    printf("owner of box (0,0): '%c'\n", b->owner[0][0]);
-    printf("claimed: %d, full: %d\n", b->claimed, board_is_full(b));
-
-    board_destroy(b);
     return 0;
 }
