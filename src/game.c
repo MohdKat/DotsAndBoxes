@@ -27,6 +27,12 @@ void run_game(void)
 
     while (!board_is_full(b)) {
         Move m = get_move(b, current_player);
+        if (m.r1 == -1) {
+             printf("\nInput ended. Exiting game.\n");
+             board_destroy(b);
+             return;
+            }
+        
         int boxes_won = board_apply_move(b, m, current_player);
 
         if (current_player == 'A') {

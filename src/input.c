@@ -5,13 +5,14 @@ Move get_move(const Board *b, char player)
 {
     Move m;
     int ch;
+    int result;
 
     while (1) {
         printf("\nPlayer %c, enter your move (r1 c1 r2 c2): ", player);
         fflush(stdout);
+        result = scanf("%d %d %d %d", &m.r1, &m.c1, &m.r2, &m.c2);
 
-        if (scanf("%d %d %d %d",
-                  &m.r1, &m.c1, &m.r2, &m.c2) != 4) {
+        if (result != 4) {
 
             printf("Invalid input. Enter four integers.\n");
 
