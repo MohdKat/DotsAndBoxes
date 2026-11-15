@@ -1,0 +1,12 @@
+A: 0 0 0 1 -> valid, won 0
+B: 1 0 1 1 -> valid, won 0
+A: 0 0 1 0 -> invalid
+B: 0 1 1 1 -> valid, won 0
+A: 0 0 0 1 -> valid, won 0
+A: 0 0 1 1 -> invalid
+A: 0 0 0 2 -> invalid
+A: 4 5 4 6 -> invalid
+A: 4 4 4 5 -> valid, won 0
+A: 3 5 4 5 -> valid, won 0
+owner of box (0,0): '#'
+claimed: 0, full: 0

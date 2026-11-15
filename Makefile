@@ -27,7 +27,7 @@ run: $(TARGET)
 
 valgrind: $(TARGET)
 	mkdir -p $(LOG_DIR)
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=$(LOG_DIR)/valgrind.log ./$(TARGET)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=$(LOG_DIR)/valgrind_$(or $(USER),$(shell whoami))_$(shell date +%Y%m%d_%H%M%S).log ./$(TARGET)
 
 debug: $(TARGET)
 	gdb ./$(TARGET)

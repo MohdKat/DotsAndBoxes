@@ -1,0 +1,16 @@
+src/board.c:74:13: runtime error: index 4 out of bounds for type 'int [4][6]'
+src/board.c:75:22: runtime error: index 4 out of bounds for type 'int [4][5]'
+src/board.c:81:15: runtime error: index 5 out of bounds for type 'int [5]'
+src/board.c:82:25: runtime error: index 5 out of bounds for type 'int [5]'
+A: 0 0 0 1 -> valid, won 0
+B: 1 0 1 1 -> valid, won 0
+A: 0 0 1 0 -> invalid
+B: 0 1 1 1 -> valid, won 0
+A: 0 0 0 1 -> valid, won 0
+A: 0 0 1 1 -> invalid
+A: 0 0 0 2 -> invalid
+A: 4 5 4 6 -> invalid
+A: 4 4 4 5 -> valid, won 0
+A: 3 5 4 5 -> valid, won 0
+owner of box (0,0): '#'
+claimed: 0, full: 0
