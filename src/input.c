@@ -1,33 +1,31 @@
 #include <stdio.h>
-#include <string.h>
 #include "input.h"
 
-Move get_move(const Board *b, char player){
-    char line[64];
+Move get_move(const Board *b, char player)
+{
     Move m;
+    int ch;
 
-    while(1){
-        printf("Player %c's turn. Enter the row and column of the first dot and second dot (e.g. 0 0 0 1): ", player);
-        //Empties the buffer into stdout for us to get the Move
+    while (1) {
+        printf("\nPlayer %c, enter your move (r1 c1 r2 c2): ", player);
         fflush(stdout);
 
-        //No move entered
-        if (fgets(line, sizeof line, stdin) == NULL) {
-            Move quit = {-1, -1, -1, -1};
-            return quit;
-        }
+        if (scanf("%d %d %d %d",
+                  &m.r1, &m.c1, &m.r2, &m.c2) != 4) {
 
-        //Line is longer than the buffer
-        if (strchr(line, '\n') == NULL) {
-            int ch;
+            printf("Invalid input. Enter four integers.\n");
+
             while ((ch = getchar()) != '\n' && ch != EOF) {
             }
+
+            continue;
         }
 
-        //Scans for Move and validates the move
-        if (sscanf(line, "%d %d %d %d", &m.r1, &m.c1, &m.r2, &m.c2) == 4 && board_is_valid_move(b, m)) {
-            return m;
+        if (!board_is_valid_move(b, m)) {
+            printf("Invalid move. Try again.\n");
+            continue;
         }
-        printf("Invalid move, try again.\n");
+
+        return m;
     }
 }

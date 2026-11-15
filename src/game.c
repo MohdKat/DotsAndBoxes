@@ -1,50 +1,59 @@
 #include <stdio.h>
-#include "game.h"
 #include "board.h"
 #include "display.h"
 #include "input.h"
+#include "game.h"
 
-void run_game(void){
-    //Create the board
+void run_game(void)
+{
     Board *b = board_create();
-    if(b == NULL){
-        fprintf(stderr, "Could not allocate the board.\n");
+
+    if (b == NULL) {
+        printf("Error: Could not create the game board.\n");
         return;
     }
-    //Initialize the score array on stack
-    int score[2] = {0, 0};
-    char current = 'A';
 
-    while(!board_is_full(b)){
-        display_board(b);
-        display_scores(score[0], score[1]);
+    int score_a = 0;
+    int score_b = 0;
+    char current_player = 'A';
 
-        Move m = get_move(b, current);
-        if (m.r1 == -1) { 
-            printf("\nInput ended, game stopped.\n");
-            break;
-        }
-
-        int won = board_apply_move(b, m, current);
-        if(won > 0){
-            //Increase the Player's score
-            score[current - 'A'] += won;
-        }else{
-            current = (current == 'A') ? 'B' : 'A';
-        }
-    }
+    printf("\n========== DOTS AND BOXES ==========\n");
+    printf("Board size: %d x %d boxes\n", BOX_ROWS, BOX_COLS);
+    printf("Enter moves as: r1 c1 r2 c2\n");
+    printf("Coordinates start at 0.\n");
 
     display_board(b);
-    display_scores(score[0], score[1]);
-    if(board_is_full(b)){
-        if(score[0] > score[1]){
-            printf("Player A wins!\n");
-        } else if(score[1] > score[0]){
-            printf("Player B wins!\n");
-        }else{
-            printf("It's a draw!\n");
+    display_scores(score_a, score_b);
+
+    while (!board_is_full(b)) {
+        Move m = get_move(b, current_player);
+        int boxes_won = board_apply_move(b, m, current_player);
+
+        if (current_player == 'A') {
+            score_a += boxes_won;
+        } else {
+            score_b += boxes_won;
+        }
+
+        display_board(b);
+        display_scores(score_a, score_b);
+
+        if (boxes_won == 0) {
+            current_player = (current_player == 'A') ? 'B' : 'A';
         }
     }
+
+    printf("\n========== GAME OVER ==========\n");
+
+    if (score_a > score_b) {
+        printf("Player A wins!\n");
+    } else if (score_b > score_a) {
+        printf("Player B wins!\n");
+    } else {
+        printf("It's a draw!\n");
+    }
+
+    printf("Final score: A = %d | B = %d\n", score_a, score_b);
 
     board_destroy(b);
 }
