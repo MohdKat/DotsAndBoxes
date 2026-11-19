@@ -55,4 +55,20 @@ make
 
 ## Team
 
-Dots and Boxes project.
+Dots and Boxes
+
+### Team members:
+
+Mohamad Katergi
+
+Martin Ghazal
+
+## Evidence
+
+### Alpine Machines
+
+The images of the running machines and the successful process are found in /evidence_images, a folder for each team member.
+
+### GDB and Valgrind logs
+
+Found in docs/debugging we immediately catted the contents of gdb and valgrind commands to txt files.

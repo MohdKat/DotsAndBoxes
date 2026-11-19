@@ -1,4 +1,4 @@
-#include <stdlib.h>   /* calloc, free, abs */
+#include <stdlib.h>
 #include "board.h"
 
 Board *board_create(void)
