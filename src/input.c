@@ -12,12 +12,16 @@ Move get_move(const Board *b, char player)
         fflush(stdout);
         result = scanf("%d %d %d %d", &m.r1, &m.c1, &m.r2, &m.c2);
 
+        if(result == EOF){
+            Move quit = {-1, -1, -1, -1};
+            return quit;
+        }
+
         if (result != 4) {
 
             printf("Invalid input. Enter four integers.\n");
 
-            while ((ch = getchar()) != '\n' && ch != EOF) {
-            }
+            while ((ch = getchar()) != '\n' && ch != EOF);
 
             continue;
         }

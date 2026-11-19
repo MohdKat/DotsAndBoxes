@@ -25,14 +25,17 @@ void run_game(void)
     display_board(b);
     display_scores(score_a, score_b);
 
+    //Game ends iff board is full
     while (!board_is_full(b)) {
         Move m = get_move(b, current_player);
+        //Exiting the game
         if (m.r1 == -1) {
-             printf("\nInput ended. Exiting game.\n");
-             board_destroy(b);
-             return;
-            }
+            printf("\nInput ended. Exiting game.\n");
+            board_destroy(b);
+            return;
+        }
         
+        //Apply move returns the number of boxes won
         int boxes_won = board_apply_move(b, m, current_player);
 
         if (current_player == 'A') {
@@ -41,9 +44,11 @@ void run_game(void)
             score_b += boxes_won;
         }
 
+        //Display the board with the changes
         display_board(b);
         display_scores(score_a, score_b);
 
+        //Switching turns
         if (boxes_won == 0) {
             current_player = (current_player == 'A') ? 'B' : 'A';
         }
@@ -51,6 +56,7 @@ void run_game(void)
 
     printf("\n========== GAME OVER ==========\n");
 
+    //Winner Verdict
     if (score_a > score_b) {
         printf("Player A wins!\n");
     } else if (score_b > score_a) {
@@ -59,6 +65,7 @@ void run_game(void)
         printf("It's a draw!\n");
     }
 
+    //Final scores
     printf("Final score: A = %d | B = %d\n", score_a, score_b);
 
     board_destroy(b);
