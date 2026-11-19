@@ -7,7 +7,7 @@ void display_board(const Board *b){
         printf("%d ", c);
     }
     printf("\n");
-
+// this is a comment to explain the logic of the display_board function. The function iterates through each row and column of the board, printing dots and lines based on the state of the board. It uses the h[][] array for horizontal lines and the v[][] array for vertical lines, as well as the owner[][] array to display which player owns each box. The function also prints the row and column indices for reference.
     for(int r = 0; r < DOT_ROWS; r++){
         //Printing the Dots and lines for the columns using the MACROS defined and h[][] for board b
         printf("%d ", r);
